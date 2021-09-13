@@ -30,7 +30,7 @@ if not creds or not creds.valid:
 service = build('sheets', 'v4', credentials=creds)
 
 # Scrape the game IDs from ESPN
-year = 2020
+year = 2002
 season_type = 2 # preseason is 1, regular season is 2
 week = 1
 scoreboard_url = 'https://www.espn.com/nfl/scoreboard/_/year/' + str(year) + '/seasontype' + '/' + str(season_type) + '/week/' + str(week) + '?xhr=1'
