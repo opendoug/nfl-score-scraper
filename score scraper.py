@@ -1,7 +1,7 @@
 import requests
 import json
 
-url = 'https://www.espn.com/nfl/game/_/gameId/401326317&xhr=1'
+url = 'https://www.espn.com/nfl/game/_/gameId/401326308&xhr=1'
 response = requests.get(url)
 site_json = json.loads(response.text)
 scoring_plays = (site_json['gamepackageJSON']['scoringPlays'])
