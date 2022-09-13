@@ -30,14 +30,17 @@ if not creds or not creds.valid:
 service = build('sheets', 'v4', credentials=creds)
 
 # Scrape the game IDs from ESPN
-year = 2002
+year = 2021
 season_type = 2 # preseason is 1, regular season is 2
-week = 1
-scoreboard_url = 'https://www.espn.com/nfl/scoreboard/_/year/' + str(year) + '/seasontype' + '/' + str(season_type) + '/week/' + str(week) + '?xhr=1'
+week = 23
+game_date = 20220213
+scoreboard_url = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=' + str(game_date)
+# scoreboard_url = 'https://www.espn.com/nfl/scoreboard/_/year/' + str(year) + '/seasontype' + '/' + str(season_type) + '/week/' + str(week) + '?xhr=1'
 game_response = requests.get(scoreboard_url)
 print('Scoreboard retrieved')
 game_json = json.loads(game_response.text)
-game_list = (game_json['content']['sbData']['events'])
+game_list = (game_json['events'])
+# game_list = (game_json['content']['sbData']['events'])
 game_ids = []
 for game in game_list:
   game_ids.append(game['id'])
@@ -63,16 +66,16 @@ for game_id in game_ids:
 
   # Construct the data being sent to Google Sheets
   SAMPLE_SPREADSHEET_ID = '15eozXKseiAJUskONRWc7OgAp1CUfeOj9JQ_rUq4UwyY'
-  SAMPLE_RANGE_NAME = 'Sheet1!A1'
+  SAMPLE_RANGE_NAME = str(year) + '!A1'
   VALUE_INPUT_OPTION = 'USER_ENTERED'
   INSERT_DATA_OPTION = 'INSERT_ROWS'
   VALUE_RANGE_BODY = {
     "values": [
       [
-        hlc['home'], hlc['home_high'], hlc['home_low'], hlc['home_close']
+        year, week, hlc['home'], hlc['home_high'], hlc['home_low'], hlc['home_close']
       ],
       [
-        hlc['away'], hlc['away_high'], hlc['away_low'], hlc['away_close']
+        year, week, hlc['away'], hlc['away_high'], hlc['away_low'], hlc['away_close']
       ]
     ]
   }
