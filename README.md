@@ -13,7 +13,9 @@
  What you get, after measuring all of this and performing some calculations, is a descriptive metric that says how many games a team *should* have won or lost. And you can plot the individual game measurements on a candlestick or other chart to look for patterns. This is all very similar to the "Pythagorean" method of determining wins and losses using points for and points against - it just goes to another level by factoring in how "stable" a team's wins were.
  
 # So...about the script...
-
+ 
+ This script is written in Python. The main file you'll use is quickstart.py.
+ 
  What this script does is scrape game data from ESPN's [hidden API](https://gist.github.com/akeaswaran/b48b02f1c94f873c6655e7129910fc3b). You start by entering in a season (YYYY) as well as the date of the first Thursday game during that season (YYYYmmdd) and the number of weeks during the season. You also note which week to begin scraping at. The script then requests data about the first week you requested, and produces a list of game IDs. Those game IDs are fed into the second request that the script makes, which produces the largest lead, largest deficit, and final margin of the game for each team. Those values are written into a Google Sheet. The script will iterate through every week of the season, depending on the starting week you feed in.
 
  You'll need to create a credentials.json file for your Google Apps integration to work. You'll also generate a token.json file when you run the Google OAuth process, which saves a local token and aids in creating refresh tokens.
