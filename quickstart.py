@@ -32,10 +32,10 @@ if not creds or not creds.valid:
 service = build('sheets', 'v4', credentials=creds)
 
 # Define the season and week variables
-first_week_start = datetime(2022, 9, 8)
+first_week_start = datetime(2023, 1, 4)
 year = 2022
 season_type = 2 # preseason is 1, regular season is 2
-how_many_weeks = 2
+how_many_weeks = 1
 
 # Initiate a while loop starting at week 1
 week = 1
@@ -48,7 +48,7 @@ while week <= how_many_weeks:
 
   # Scrape the game IDs from ESPN
   scoreboard_url = 'https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=' + str(start_date_clean) + '-' + str(end_date_clean)
-  # scoreboard_url = 'https://www.espn.com/nfl/scoreboard/_/year/' + str(year) + '/seasontype' + '/' + str(season_type) + '/week/' + str(week) + '?xhr=1'
+  # old one was scoreboard_url = 'https://www.espn.com/nfl/scoreboard/_/year/' + str(year) + '/seasontype' + '/' + str(season_type) + '/week/' + str(week) + '?xhr=1'
   game_response = requests.get(scoreboard_url)
   print('Scoreboard retrieved')
   game_json = json.loads(game_response.text)
@@ -61,13 +61,15 @@ while week <= how_many_weeks:
 
   # Scrape the scoring play data from ESPN
   for game_id in game_ids:
-    game_url = 'https://www.espn.com/nfl/game/_/gameId/' + game_id + '&xhr=1'
+    game_url = 'http://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=' + game_id
+    # old one was game_url = 'https://www.espn.com/nfl/game/_/gameId/' + game_id + '&_xhr=1'
     print(game_url)
     scoring_response = requests.get(game_url)
     print('Game data retrieved')
+    print(scoring_response.text)
     scoring_json = json.loads(scoring_response.text)
-    scoring_plays = (scoring_json['gamepackageJSON']['scoringPlays'])
-    teams = (scoring_json['gamepackageJSON']['boxscore']['teams'])
+    scoring_plays = (scoring_json['scoringPlays'])
+    teams = (scoring_json['boxscore']['teams'])
     home_team = teams[1]['team']['abbreviation']
     away_team = teams[0]['team']['abbreviation']
     margin = []
